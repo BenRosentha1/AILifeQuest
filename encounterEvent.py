@@ -3,6 +3,7 @@ from prompts import eventPrompt
 from getAPI import getAPI
 from displayCharacter import displayCharacter
 from checkAlive import checkAlive
+from createMessages import createMessages
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
@@ -10,16 +11,7 @@ client = OpenAI(api_key=getAPI())
 def encounterEvent(character, messages, MODEL):
 
     # Prompting messages
-    newMessages = [
-        {
-            "role" : "user",
-            "content" : eventPrompt
-        },
-        {
-            "role" : "user",
-            "content" : displayCharacter(character)
-        }
-    ]
+    newMessages = createMessages({"user", eventPrompt}, {"user", displayCharacter(character)})
     
     # Update messages
     messages.extend(newMessages)

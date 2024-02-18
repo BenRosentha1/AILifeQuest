@@ -1,21 +1,17 @@
 from openai import OpenAI
-from dotenv import load_dotenv
-import os, json
+import json
 
+from getAPI import getAPI
 from prompts import initPrompt
-
-# Load environment variables from .env
-load_dotenv()
-
-# Access the API key
-api_key = os.getenv("OPENAI_API_KEY")
+from createMessages import createMessages
+from collectResponse import collectResponse
 
 # Use the API key in OpenAI client initialization
-client = OpenAI(api_key=api_key)
+client = OpenAI(api_key=getAPI())
 
 class Character:
     # Age:
-    '''The character will always start at age zero.'''
+    '''The character will always start at age five.'''
     age = 5
     
     # User given qualities:
@@ -46,7 +42,7 @@ class Character:
 
     # AI given Qualities:
     ''' These qualities will be picked by the AI and explained to the user when the game starts or when the character develops these qualities.
-    This gives background to the character as these are things that the character is unable to control but sets the stage of their life.  these
+    This gives background to the character as these are things that the character is unable to control but sets the stage of their life.  These
     qualities may change and develop over the characters life.'''
     qualities = {
         "Name [First Last]" : "",
@@ -74,12 +70,9 @@ class Character:
         "Mother Profession" : "",
         "Father Profession" : ""}
 
-    # Functions:
-    
     # Initialize
-    '''This initializes the character.  It will be called at the very beginning of the game and the parameters are as follows:
-    character = Character(self, yearBorn)
-    This will set the characters yearBorn'''
+    '''This initializes the character.  It will be called at the very beginning of the game and it only needs the year if the character to
+    be initialized, all qualities and characteristics of the character are still empty.'''
     def __init__(self, yearBorn):
         self.yearBorn = yearBorn
 
@@ -89,47 +82,20 @@ class Character:
         response_format = { "type" : "json_object" }
 
         # Prompts
-        prompt1 = "Fill in the blanks of this json data structure to create a somewhat believable character out of only these two pieces of information, the character was born in " + str(self.yearBorn) + " and the character is 5 years old.  (Keep each description as detailed as necessary and keep historical accuracy in mind for inspiration) (Remember the character is only 5 years old and has very little skills or abilities):" 
+        prompt = "Fill in the blanks of this json data structure to create a somewhat believable character out of only these two pieces of information, the character was born in " + str(self.yearBorn) + " and the character is 5 years old.  (Keep each description as detailed as necessary and keep historical accuracy in mind for inspiration) (Remember the character is only 5 years old and has very little skills or abilities):" 
         
-        # Prompting messages
-        messages = [
-            {
-                "role" : "user",
-                "content" : initPrompt
-            },
-            {
-                "role" : "user",
-                "content" : prompt1
-            },
-            {
-                "role" : "user",
-                "content" : json.dumps(self.qualities)
-            }
-        ]
+        # Load initial prompting messages
+        messages = createMessages("user", initPrompt, "user", prompt, "user", json.dumps(self.qualities))
 
-        # Create and Prompt Chat
-        completion = client.chat.completions.create(
-            model = model,
-            messages = messages,
-            response_format = response_format
-        )
-
-        # Response
-        response = completion.choices[0].message.content
-
-        # Log the response
-        newMessages = [
-            {
-                "role" : "system",
-                "content" : response
-            }
-        ]
-
-        # Update messages
-        messages.extend(newMessages)
+        # Prompt model and load response
+        response = collectResponse(client, model, messages, response_format)
 
         # Update character qualities
         self.qualities = json.loads(response)
+       
+        # Log the response
+        newMessages = createMessages("system", response)
+        messages.extend(newMessages)
 
         # Return the new list of messages
         return messages
@@ -143,40 +109,19 @@ class Character:
         # Response format
         response_format = { "type" : "json_object" }
 
-        newMessages = [
-            {
-                "role" : "user",
-                "content" : prompt
-            },
-            {
-                "role" : "user",
-                "content" : json.dumps(self.characteristics)
-            }
-        ]
-
-        # Update messages
+        # Load prompting messages
+        newMessages = createMessages("user", prompt, "user", json.dumps(self.characteristics))
         messages.extend(newMessages)
 
-        # Create and Prompt Chat
-        completion = client.chat.completions.create(
-            model = model,
-            messages = messages,
-            response_format = response_format
-        )
-
-        # Response
-        response = completion.choices[0].message.content
+        # Prompt model and load response
+        response = collectResponse(model, messages, response_format)
 
         # Log the response
-        newMessages = [
-            {
-                "role" : "system",
-                "content" : response
-            }
-        ]
-
-        # Update messages
+        newMessages = createMessages("system", response)
         messages.extend(newMessages)
 
         # Update character qualities
         self.characteristics = json.loads(response)
+
+        # Return messages
+        return messages
