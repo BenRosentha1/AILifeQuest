@@ -4,44 +4,26 @@ from openai import OpenAI
 # Self built programs
 from getAPI import getAPI
 from prompts import beginGamePrompt
-
-#===============================================================================================================================
+from createMessages import createMessages
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
 
-#===============================================================================================================================
-
 # Begin game
 def beginGame(character, model, messages):
-    newMessages = [
-        {
-            "role" : "user",
-            "content" : beginGamePrompt
-        },
-        {
-            "role" : "user",
-            "content" : str(character.qualities)
-        }
-    ]
-
+    # Load prompting messages
+    newMessages = createMessages("user", beginGamePrompt, "user", str(character.qualities))
     messages.extend(newMessages)
 
-    # Create and Prompt Chat
-    completion = client.chat.completions.create(
-        model = model,
-        messages = messages
-    )
-
-    response = completion.choices[0].message.content
+    # Prompt model and load response
+    response = collectResponse(client, model, messages)
     
-    responseMessage = {
-        "role" : "system",
-        "content" : response
-    }
+    # Log the response
+    newMessages = createMessages("system", response)
+    messages.extend(newMessages)
 
-    messages.append(responseMessage)
-
+    # Print response
     print("\n" + response + "\n")
 
+    # Return Messages
     return messages
