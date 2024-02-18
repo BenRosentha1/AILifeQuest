@@ -4,39 +4,30 @@ from getAPI import getAPI
 from displayCharacter import displayCharacter
 from checkAlive import checkAlive
 from createMessages import createMessages
+from collectResponse import collectResponse
+
+"""
+This function...
+"""
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
 
-def encounterEvent(character, messages, MODEL):
+def encounterEvent(character, messages, model):
 
-    # Prompting messages
+    # Load prompting messages
     newMessages = createMessages({"user", eventPrompt}, {"user", displayCharacter(character)})
-    
-    # Update messages
     messages.extend(newMessages)
 
-    # Create and Prompt Chat
-    completion = client.chat.completions.create(
-        model = MODEL,
-        messages = messages
-    )
-
-    response = completion.choices[0].message.content
+    # Prompt model and collect response
+    response = collectResponse(client, model, messages)
 
     # Print event description
     print(response)
 
-    # Check if character is alive
-    checkAlive(character, MODEL, response)
-    if not character.alive:
-        return messages
-
-    # Update messages
-    responseMessage = [{
-        "role" : "system",
-        "content" : response
-    }]
+    # Log the response
+    responseMessage = createMessages({"system, response"})
     messages.extend(responseMessage)
 
+    # Return messages
     return messages

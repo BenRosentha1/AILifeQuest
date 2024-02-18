@@ -78,17 +78,15 @@ class Character:
 
     ''' This will have chat gpt build the character and fill out the character profile'''
     def initializeCharacter(self, model):
-        # Response format
-        response_format = { "type" : "json_object" }
 
         # Prompts
         prompt = "Fill in the blanks of this json data structure to create a somewhat believable character out of only these two pieces of information, the character was born in " + str(self.yearBorn) + " and the character is 5 years old.  (Keep each description as detailed as necessary and keep historical accuracy in mind for inspiration) (Remember the character is only 5 years old and has very little skills or abilities):" 
         
         # Load initial prompting messages
-        messages = createMessages("user", initPrompt, "user", prompt, "user", json.dumps(self.qualities))
+        messages = createMessages({"user", initPrompt}, {"user", prompt}, {"user", json.dumps(self.qualities)})
 
         # Prompt model and load response
-        response = collectResponse(client, model, messages, response_format)
+        response = collectResponse(client, model, messages, response_format={ "type" : "json_object" })
 
         # Update character qualities
         self.qualities = json.loads(response)
@@ -110,14 +108,14 @@ class Character:
         response_format = { "type" : "json_object" }
 
         # Load prompting messages
-        newMessages = createMessages("user", prompt, "user", json.dumps(self.characteristics))
+        newMessages = createMessages({"user", prompt}, {"user", json.dumps(self.characteristics)})
         messages.extend(newMessages)
 
         # Prompt model and load response
         response = collectResponse(model, messages, response_format)
 
         # Log the response
-        newMessages = createMessages("system", response)
+        newMessages = createMessages({"system", response})
         messages.extend(newMessages)
 
         # Update character qualities

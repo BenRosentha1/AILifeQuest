@@ -1,3 +1,6 @@
+"""
+This function creates a new list of messages given any number of roles followed by their respective contents
+"""
 def createMessages(*args):
     messages = []
     for roleContent in args:

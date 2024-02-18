@@ -5,6 +5,7 @@ from openai import OpenAI
 from getAPI import getAPI
 from prompts import beginGamePrompt
 from createMessages import createMessages
+from collectResponse import collectResponse
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
@@ -12,7 +13,7 @@ client = OpenAI(api_key=getAPI())
 # Begin game
 def beginGame(character, model, messages):
     # Load prompting messages
-    newMessages = createMessages("user", beginGamePrompt, "user", str(character.qualities))
+    newMessages = createMessages({"user", beginGamePrompt}, {"user", str(character.qualities)})
     messages.extend(newMessages)
 
     # Prompt model and load response
