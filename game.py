@@ -1,7 +1,7 @@
 # Common Libraries
 from openai import OpenAI
 
-# Personal files and functions
+# Files and functions
 from prompts import welcomePrompt
 from beginGame import beginGame
 from getAPI import getAPI
@@ -11,11 +11,8 @@ from AILifeQuest.years11to20 import years11to20
 from AILifeQuest.years21toEnd import years21toEnd
 from displayScorecard import displayScorecard
 
-# Personal classes
+# Classes
 import Character
-
-# Testing
-from outputTest import printMessages
 
 #===============================================================================================================================
 
