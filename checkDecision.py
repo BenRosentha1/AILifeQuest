@@ -2,15 +2,15 @@
 This function checks to see if the users input was a selection of one of the choices or a selection of a pre-written decision
 """
 def checkDecision(options, decision):
-    if len(characterDecision) == 1:
-        match characterDecision:
+    if len(decision) == 1:
+        match decision.upper():
             case 'A':
-                characterDecision = options[0]
+                decision = list(options.values())[0]
             case 'B':
-                characterDecision = options[1]
+                decision = list(options.values())[1]
             case 'C':
-                characterDecision = options[2]
+                decision = list(options.values())[2]
             case 'D':
-                characterDecision = options[3]
+                decision = list(options.values())[3]
     
-    return characterDecision
+    return decision

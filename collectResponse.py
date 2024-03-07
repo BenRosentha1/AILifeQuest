@@ -1,8 +1,9 @@
 from openai import OpenAI
+
 """
 This function collects the response from the model
 """
-
+# Collect response
 def collectResponse(client, model, messages, responseFormat=None):
         # Create and Prompt Chat
         completion = client.chat.completions.create(

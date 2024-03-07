@@ -3,7 +3,7 @@ from prompts import yearBornPrompt, yearBornAgainPrompt
 '''
 This function prompts the user for what year they want their character to be born and returns it as an int.
 '''
-
+# Get year born
 def getYearBorn():
     # Prompt user
     print(yearBornPrompt)

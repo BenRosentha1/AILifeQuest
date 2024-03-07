@@ -7,44 +7,37 @@ from checkAlive import checkAlive
 from createMessages import createMessages
 from collectResponse import collectResponse
 from checkDecision import checkDecision
+import json
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
 
+"""
+This function loads 4 possible solutions from the LLM based on the event.  Then the character is allowed to respond with a character decision.  Then the character will be updated.
+"""
+# Make decision
 def makeDecision(character, messages, model):
 
     # Load prompting messages
-    newMessages = createMessages({"user", responsePrompt}, {"user", displayCharacter(character)})
+    newMessages = createMessages({"user" : responsePrompt}, {"user" : displayCharacter(character)})
     messages.extend(newMessages)
 
-    #    fix for json ----------------------------------------------------------------------------------------------------------------
-    # Collect response from model
-    response = collectResponse(client, model, messages, responseFormat={ "type" : "json_object" })    # DEBUGG
+    # Collect options from model
+    options = json.loads(collectResponse(client, model, messages, responseFormat={ "type" : "json_object" }))
 
-    # Parse the response for the options
-    # options = parseForOptions(response)
-
-    # TRY THIS ONE    DEBUGG
-    for letter, content in response.items():
+    # Print options
+    for letter, content in options.items():
         print(f"\n{letter}:  {content}")
 
-    # Print out the options
-    # i = 0
-    # for letter in "ABCD":
-    #     print(f"\n{letter}:  {options[i]}")
-    #     i += 1
-
-    #    fix for json ----------------------------------------------------------------------------------------------------------------
-
     # Prompt user for response
-    print("What will you do? [respond with 'A', 'B', 'C', 'D', or write in whatever kind of feelings you want you character to have in response to the event:")
+    print("\nWhat will you do? [respond with 'A', 'B', 'C', 'D', or write in whatever kind of feelings you want you character to have in response to the event:")
 
     # Collect character decision
     characterDecision = input()
-    characterDecision = checkDecision(response, characterDecision)
+    characterDecision = checkDecision(options, characterDecision)
 
     # Log the response
-    newMessages = createMessages({"system" : response}, {"user" : characterDecision})
+    newMessages = createMessages({"user" : characterDecision})
     messages.extend(newMessages)
 
     # Update Character
@@ -61,7 +54,7 @@ def makeDecision(character, messages, model):
     print("\n" + response, end="\n\n")
 
     # Update messages
-    newMessages = makeDecision({"system" : response})
+    newMessages = createMessages({"system" : response})
     messages.extend(newMessages)
 
     # Return messages

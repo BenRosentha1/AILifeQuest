@@ -2,9 +2,9 @@ import os
 from dotenv import load_dotenv
 
 """
-This function accesses and returns the API key from the hidden file
+This function accesses and returns the API key from the hidden file.
 """
-
+# Get API key
 def getAPI():
     
     # Load environment variables from .env

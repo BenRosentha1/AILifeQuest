@@ -5,7 +5,10 @@ from prompts import checkAlivePrompt
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
 
+"""This function checks to see if the character is still alive by feeding a string into the LLM."""
 def checkAlive(character, MODEL, previousResponse):
+    
+    # Build the messages list
     messages = [
         {
             "role" : "user",
@@ -23,7 +26,9 @@ def checkAlive(character, MODEL, previousResponse):
         messages = messages
     )
 
+    # Collect response
     response = completion.choices[0].message.content
 
+    # Log the change if there was any
     if response.upper() == "FALSE":
         character.alive = False
