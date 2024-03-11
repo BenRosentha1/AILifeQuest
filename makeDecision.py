@@ -1,7 +1,6 @@
 from getAPI import getAPI
-from prompts import responsePrompt, decisionResponsePrompt
+from prompts import responsePrompt, decisionResponsePrompt, decisionPrompt
 from displayCharacter import displayCharacter
-from parseForOptions import parseForOptions
 from openai import OpenAI
 from checkAlive import checkAlive
 from createMessages import createMessages
@@ -19,32 +18,25 @@ This function loads 4 possible solutions from the LLM based on the event.  Then 
 def makeDecision(character, messages, model):
 
     # Load prompting messages
-    newMessages = createMessages({"user" : responsePrompt}, {"user" : displayCharacter(character)})
+    newMessages = createMessages({"user" : responsePrompt})
     messages.extend(newMessages)
 
     # Collect options from model
-    options = json.loads(collectResponse(client, model, messages, responseFormat={ "type" : "json_object" }))
+    options = json.loads(collectResponse(client, model, messages, response_format={ "type" : "json_object" }))
 
     # Print options
     for letter, content in options.items():
         print(f"\n{letter}:  {content}")
 
     # Prompt user for response
-    print("\nWhat will you do? [respond with 'A', 'B', 'C', 'D', or write in whatever kind of feelings you want you character to have in response to the event:")
+    print(decisionPrompt)
 
     # Collect character decision
     characterDecision = input()
     characterDecision = checkDecision(options, characterDecision)
 
-    # Log the response
-    newMessages = createMessages({"user" : characterDecision})
-    messages.extend(newMessages)
-
-    # Update Character
-    character.updateCharacter(model, messages)
-
-    # Respond to decision
-    newMessages = createMessages({"user" : decisionResponsePrompt})
+    # Log the decision and decision response prompt
+    newMessages = createMessages({"user" : characterDecision}, {"user" : decisionResponsePrompt})
     messages.extend(newMessages)
     
     # Prompt chat and collect response
@@ -54,8 +46,14 @@ def makeDecision(character, messages, model):
     print("\n" + response, end="\n\n")
 
     # Update messages
-    newMessages = createMessages({"system" : response})
+    newMessages = createMessages({"assistant" : response})
     messages.extend(newMessages)
+
+    # Update Character
+    character.updateCharacter(model, messages)
+
+    # Clean up Messages
+    messages = messages[0:1]
 
     # Return messages
     return messages

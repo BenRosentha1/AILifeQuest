@@ -4,12 +4,12 @@ from openai import OpenAI
 This function collects the response from the model
 """
 # Collect response
-def collectResponse(client, model, messages, responseFormat=None):
+def collectResponse(client, model, messages, response_format=None):
         # Create and Prompt Chat
         completion = client.chat.completions.create(
             model = model,
             messages = messages,
-            response_format = responseFormat
+            response_format = response_format
         )
 
         # Collect and return response

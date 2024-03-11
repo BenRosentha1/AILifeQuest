@@ -2,7 +2,8 @@ from openai import OpenAI
 import json
 
 from getAPI import getAPI
-from prompts import initPrompt
+from prompts import systemPrompt, updateCharacterPrompt
+from prompts import buildCharacterPrompt
 from createMessages import createMessages
 from collectResponse import collectResponse
 
@@ -85,21 +86,17 @@ class Character:
     ''' This function will have the LLM build the character and fill out the character profile.  This will only happen once in the course of the game.'''
     def buildCharacter(self, model):
 
-        # Prompt
-        prompt = "Fill in the blanks of this json data structure to create a somewhat believable character out of only these two pieces of information, the character was born in " + str(self.yearBorn) + " and the character is 5 years old.  (Keep each description as detailed as necessary and keep historical accuracy in mind for inspiration) (Remember the character is only 5 years old and has very little skills or abilities):" 
-        
         # Load initial prompting messages
-        messages = createMessages({"user" : initPrompt}, {"user" : prompt}, {"user" : json.dumps(self.qualities)})
+        messages = createMessages({"system" : systemPrompt}, {"user" : buildCharacterPrompt(str(self.yearBorn))}, {"user" : json.dumps(self.qualities)})
 
         # Prompt model and load response
-        response = collectResponse(client, model, messages, responseFormat={ "type" : "json_object" })
+        response = collectResponse(client, model, messages, response_format={ "type" : "json_object" })
 
         # Update character qualities
         self.qualities = json.loads(response)
-       
-        # Log the response
-        newMessages = createMessages({"system" : response})
-        messages.extend(newMessages)
+
+        # Remove unnecessary context from the conversation
+        messages = messages[0:1]
 
         # Return the new list of messages
         return messages
@@ -108,18 +105,13 @@ class Character:
     # Update Character
     '''This function will edit the scorecard based on every users decision.  This will be called after each decision the character makes.'''
     def updateCharacter(self, model, messages):
-        
-        prompt = "Based on the previous response from the user add or subtract \"points\" from the characters characteristics.  The characteristics work as follows: 0 is equal to a neutral value (a neutral amount of that particular characteristic), -100 is equal to the worst possible value (the least amount of that particular characteristic), +100 is equal to the best possible value (the most amount of that particular characteristic).  Based on the users response to how their character should act (based on the event you described in the message previous to their response) adjust the characters characteristics +-5 for each characteristic, you may leave some characteristics unaffected if you think they are not displayed in the event or reaction.  Only respond with the updated characters characteristics and nothing more.  Here is the characters characteristics:\n"
-
-        # Response format
-        response_format = { "type" : "json_object" }
 
         # Load prompting messages
-        newMessages = createMessages({"user" : prompt}, {"user" : json.dumps(self.characteristics)})
+        newMessages = createMessages({"user" : updateCharacterPrompt}, {"user" : json.dumps(self.characteristics)})
         messages.extend(newMessages)
 
         # Prompt model and load response
-        response = collectResponse(client, model, messages, response_format)
+        response = collectResponse(client, model, messages, response_format={ "type" : "json_object" })
 
         # Log the response
         newMessages = createMessages({"system" : response})

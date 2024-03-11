@@ -2,7 +2,8 @@ from encounterEvent import encounterEvent
 from makeDecision import makeDecision
 
 """
-This function takes the user through the years 5 to 10 of the characters life.
+This function takes the user through the years 5 to 10 of the characters life.  The character will encounter one event
+per year of their life.
 """
 # Years 5 to 10
 def years5to10(character, MODEL, messages):

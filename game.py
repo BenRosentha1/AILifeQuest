@@ -6,9 +6,9 @@ from prompts import welcomePrompt
 from beginGame import beginGame
 from getAPI import getAPI
 from getYearBorn import getYearBorn
-from AILifeQuest.years5to10 import years5to10
-from AILifeQuest.years11to20 import years11to20
-from AILifeQuest.years21toEnd import years21toEnd
+from years5to10 import years5to10
+from years11to20 import years11to20
+from years21toEnd import years21toEnd
 from displayScorecard import displayScorecard
 
 # Classes

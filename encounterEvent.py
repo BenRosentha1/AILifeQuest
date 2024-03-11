@@ -25,8 +25,8 @@ def encounterEvent(character, messages, model):
     # Print event description
     print(response)
 
-    # Log the response
-    responseMessage = createMessages({"system" : response})
+    # Load the response
+    responseMessage = createMessages({"assistant" : response})
     messages.extend(responseMessage)
 
     # Return messages

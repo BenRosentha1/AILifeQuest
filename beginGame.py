@@ -14,6 +14,7 @@ This function begins the game by having the model describe the characters backst
 """
 # Begin game
 def beginGame(character, model, messages):
+    
     # Load prompting messages
     newMessages = createMessages({"user" : beginGamePrompt}, {"user" : str(character.qualities)})
     messages.extend(newMessages)
@@ -21,9 +22,11 @@ def beginGame(character, model, messages):
     # Prompt model and load response
     response = collectResponse(client, model, messages)
     
-    # Log the response
+    # Load the response
     newMessages = createMessages({"system" : response})
-    messages.extend(newMessages)
+    
+    # Clean up messages to only include the assistant prompt
+    messages = messages[0:1]
 
     # Print response
     print("\n" + response + "\n")
