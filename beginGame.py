@@ -3,11 +3,12 @@ from openai import OpenAI
 
 # Self built programs
 from getAPI import getAPI
-from prompts import beginGamePrompt
+from prompts import beginGamePrompt, imagePrompt
 from createMessages import createMessages
 from collectResponse import collectResponse
 from buildSpeech import buildSpeech
 from playsound import playsound
+from makePic import makePic
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
@@ -31,7 +32,8 @@ def beginGame(character, model, messages):
     messages = messages[0:1]
 
     # Print response
-    speech = buildSpeech(response)
+    makePic(response + imagePrompt, next(iter(character.qualities.values())))
+    speech = buildSpeech(response, 1.25)
     print("\n" + response + "\n")
     playsound(speech)
 

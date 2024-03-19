@@ -25,7 +25,7 @@ def encounterEvent(character, messages, model):
     response = collectResponse(client, model, messages)
 
     # Print event description
-    speech = buildSpeech(response, 1.75)
+    speech = buildSpeech(response, 1.25)
     print(response)
     playsound(speech)
 

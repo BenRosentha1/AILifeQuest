@@ -75,3 +75,5 @@ Based on the event, the characters decision and the result of the event adjust t
 You may leave some characteristics unaffected if you think they are not displayed in the event or reaction.
 Only respond with the updated characters characteristics and nothing more.
 Here is the characters characteristics:\n"""
+
+imagePrompt = """DO NOT INCLUDE ANY WORDS IN THE PICTURE!!!"""
