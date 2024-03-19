@@ -6,6 +6,8 @@ from getAPI import getAPI
 from prompts import beginGamePrompt
 from createMessages import createMessages
 from collectResponse import collectResponse
+from buildSpeech import buildSpeech
+from playsound import playsound
 
 # Use the API key in OpenAI client initialization
 client = OpenAI(api_key=getAPI())
@@ -29,7 +31,9 @@ def beginGame(character, model, messages):
     messages = messages[0:1]
 
     # Print response
+    speech = buildSpeech(response)
     print("\n" + response + "\n")
+    playsound(speech)
 
     # Return Messages
     return messages

@@ -1,5 +1,7 @@
 from encounterEvent import encounterEvent
 from makeDecision import makeDecision
+from buildSpeech import buildSpeech
+from playsound import playsound
 
 """
 This function takes the user through the years 11 to 20 of the characters life.  Each year the character will encounter 2 events 2 corresponding decisions.
@@ -33,9 +35,12 @@ def years11to20(character, MODEL, messages):
             # Clean up messages
             messages = messages[2 : len(messages) - 1]
 
-        # Increment age
-        character.age += 1
-        print("Congratulations " + list(character.qualities.values())[0] + ", you are now " + str(character.age) + " years old!\n")
+        # Prompt user with age progression
+        name = list(character.qualities.values())[0]
+        birthday = f"Happy Birthday!  {name}, you are now {str(character.age)} years old!\n"
+        speech = buildSpeech(birthday)
+        print(birthday)
+        playsound(speech)
 
     # Return messages
     return messages

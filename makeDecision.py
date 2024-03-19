@@ -6,6 +6,8 @@ from checkAlive import checkAlive
 from createMessages import createMessages
 from collectResponse import collectResponse
 from checkDecision import checkDecision
+from buildSpeech import buildSpeech
+from playsound import playsound
 import json
 
 # Use the API key in OpenAI client initialization
@@ -26,10 +28,14 @@ def makeDecision(character, messages, model):
 
     # Print options
     for letter, content in options.items():
+        speech = buildSpeech(letter + content, 1.75)
         print(f"\n{letter}:  {content}")
+        playsound(speech)
 
     # Prompt user for response
+    speech = buildSpeech(decisionPrompt, 1.75)
     print(decisionPrompt)
+    playsound(speech)
 
     # Collect character decision
     characterDecision = input()
@@ -43,7 +49,9 @@ def makeDecision(character, messages, model):
     response = collectResponse(client, model, messages)
 
     # Print response to reaction
+    speech = buildSpeech(response, 1.75)
     print("\n" + response, end="\n\n")
+    playsound(speech)
 
     # Update messages
     newMessages = createMessages({"assistant" : response})

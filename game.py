@@ -10,6 +10,8 @@ from years5to10 import years5to10
 from years11to20 import years11to20
 from years21toEnd import years21toEnd
 from displayScorecard import displayScorecard
+from buildSpeech import buildSpeech
+from playsound import playsound
 
 # Classes
 import Character
@@ -31,7 +33,9 @@ MODEL = "gpt-3.5-turbo-1106"
 client = OpenAI(api_key=getAPI())
 
 # Prompt Beginning of Game
+speech = buildSpeech(welcomePrompt)
 print(welcomePrompt)
+playsound(speech)
 
 # Get yearBorn from user
 yearBorn = getYearBorn()

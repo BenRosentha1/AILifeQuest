@@ -1,5 +1,7 @@
 from encounterEvent import encounterEvent
 from makeDecision import makeDecision
+from buildSpeech import buildSpeech
+from playsound import playsound
 
 """
 This function takes the user through the years 5 to 10 of the characters life.  The character will encounter one event
@@ -28,7 +30,10 @@ def years5to10(character, MODEL, messages):
 
         # Prompt user with age progression
         name = list(character.qualities.values())[0]
-        print(f"Happy Birthday!  {name}, you are now {str(character.age)} years old!\n")
+        birthday = f"Happy Birthday!  {name}, you are now {str(character.age)} years old!\n"
+        speech = buildSpeech(birthday)
+        print(birthday)
+        playsound(speech)
 
     # Return messages
     return messages
