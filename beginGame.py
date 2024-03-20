@@ -32,7 +32,7 @@ def beginGame(character, model, messages):
     messages = messages[0:1]
 
     # Print response
-    makePic(response + imagePrompt, next(iter(character.qualities.values())))
+    makePic(response + imagePrompt)
     speech = buildSpeech(response, 1.25)
     print("\n" + response + "\n")
     playsound(speech)

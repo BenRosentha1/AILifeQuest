@@ -34,14 +34,15 @@ Do not make any assumptions about the unwritten life of the character or the cha
 Here is the character:\n"""
 
 eventPrompt = """Set up an event that represents a milestone in the character's life based on the characters age and the characters qualities.
-In this event something will happen to the character and the user will decide how they want their character to react
-to the said event.
+In this event something will happen to the character.
+The description of the event should end at a point where the character will have to react.
 You will be supplied with the characters profile immediately after this message.
 Keep using social and historical context.
 Do not do anything but describe the event.
 Do not ask the player any questions.
 If the character is young, still describe an event that may happen to them or their family even if it is small.
 Make sure to take into account the characters age, and all of the characters qualities.
+DO NOT PROMPT THE USER AT ALL, ONLY DESCRIBE THE EVENT AND NOTHING MORE!
 Here is the characters profile:\n"""
 
 responsePrompt = """Your previous message laid out an event in the character life.  
@@ -65,7 +66,7 @@ Do not repeat the users response."""
 
 checkAlivePrompt = "Read through the following message.  Respond with one word, either 'True' or 'False'.  True indicates the character in the message is alive.  False indicates the character in the message is dead.  Take your time when analyzing, it is most likely the case that the character is alive and you should therefore return 'True'.  DO NOT RESPOND WITH ANYTHING BUT ONE WORD."
 
-decisionPrompt = "\nWhat will you do? [respond with 'A', 'B', 'C', 'D', or write in whatever kind of feelings you want you character to have in response to the event:"
+decisionPrompt = "\nWhat will you do? [respond with 'A', 'B', 'C', 'D', or write in whatever kind of reaction you want you character to have in response to the event:"
 
 updateCharacterPrompt = """Based on the previous response from the user add or subtract \"points\" from the characters characteristics in the following JSON datastructure.
 The characteristics work as follows: 0 is equal to a neutral value (a neutral amount of that particular characteristic),
@@ -76,4 +77,4 @@ You may leave some characteristics unaffected if you think they are not displaye
 Only respond with the updated characters characteristics and nothing more.
 Here is the characters characteristics:\n"""
 
-imagePrompt = """DO NOT INCLUDE ANY WORDS IN THE PICTURE!!!"""
+imagePrompt = """DO NOT INCLUDE ANY WORDS IN THE PICTURE!!!  WHATEVER YOU DO, DO NOT INCLUDE ANY WORDS IN THE PICTURE!  Please use a style of oil paint and realism!"""

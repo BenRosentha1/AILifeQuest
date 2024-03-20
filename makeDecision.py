@@ -1,5 +1,5 @@
 from getAPI import getAPI
-from prompts import responsePrompt, decisionResponsePrompt, decisionPrompt
+from prompts import responsePrompt, decisionResponsePrompt, decisionPrompt, imagePrompt
 from displayCharacter import displayCharacter
 from openai import OpenAI
 from checkAlive import checkAlive
@@ -8,6 +8,7 @@ from collectResponse import collectResponse
 from checkDecision import checkDecision
 from buildSpeech import buildSpeech
 from playsound import playsound
+from makePic import makePic
 import json
 
 # Use the API key in OpenAI client initialization
@@ -49,6 +50,7 @@ def makeDecision(character, messages, model):
     response = collectResponse(client, model, messages)
 
     # Print response to reaction
+    makePic(response + imagePrompt)    
     speech = buildSpeech(response, 1.25)
     print("\n" + response, end="\n\n")
     playsound(speech)
