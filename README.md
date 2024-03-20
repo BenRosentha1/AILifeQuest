@@ -6,3 +6,4 @@ By building this project I learned a lot and gained a lot of skills.  Before thi
 I have also not worked out how to use any library outside of the standard ones before so getting that experience with ChatGPT was enlightening.
 I have never had a reason to make a .gitignore file but as my API key is sensitive I was influenced to learn about this.
 My functions are all very modular and with little changes the LLM model can be changed.
+I had also not worked with other forms of media before and this program works with both images and audio
