@@ -35,6 +35,9 @@ def years11to20(character, MODEL, messages):
             # Clean up messages
             messages = messages[2 : len(messages) - 1]
 
+        # Increment age
+        character.age += 1
+
         # Prompt user with age progression
         name = list(character.qualities.values())[0]
         birthday = f"Happy Birthday!  {name}, you are now {str(character.age)} years old!\n"

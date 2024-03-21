@@ -25,6 +25,12 @@ def years5to10(character, MODEL, messages):
         # Make decision
         messages = makeDecision(character, messages, MODEL)
 
+        # Check is the character lived through the event
+        if not character.alive:
+            
+            # If the character died end the game
+            return messages
+
         # Increment age
         character.age += 1
 
